@@ -14,6 +14,7 @@ const Insert = () => {
   const [content, setContent] = useState('');
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
+  const [CheckUpdate, setCheckUpdate] = useState(false);
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -27,12 +28,15 @@ const Insert = () => {
       supabase.from("trainings").select("*").eq("id", id),
   });
 
-  // set title and content value 
+  // to prevent many renders
   useEffect(() => {
     if (data) {
+      // set title value
       setTitle(data.data[0].title);
+      // set content value
       setContent(data.data[0].content);
-    //   console.log(data?.data[0].title);
+      // set update staus 
+      setCheckUpdate(true)
     }
   }, [data]);
 
@@ -50,10 +54,6 @@ const Insert = () => {
       if (error) {
         console.log(error)
       }
-    // console.log(title);
-    // console.log(content);
-    // console.log(start);
-    // console.log(end);
   };
 
    const refresh = {
@@ -88,11 +88,11 @@ const Insert = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           mutate({
-                title: title,
-                content: content,
-                start: moment(start).format(),
-                end: moment(end).format(),
-            });
+            title: title,
+            content: content,
+            start: moment(start).format(),
+            end: moment(end).format(),
+          });
         }}
       >
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -203,6 +203,15 @@ const Insert = () => {
           Submit
         </button>
       </form>
+      {CheckUpdate && (
+        <div
+          class="bg-green-100 border-t border-b border-green-500 text-green-700 px-4 py-3 mt-10 mx-40"
+          role="alert"
+        >
+          <p class="font-bold">Thank you</p>
+          <p class="text-sm">New training details have been updated.</p>
+        </div>
+      )}
     </div>
   );
 };
