@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { QueryClientProvider, QueryClient, useQuery } from "react-query";
 import { useQueryClient } from "react-query";
-import moment from "moment/moment";
 import supabase from "../supabase";
 import Link from "next/link";
-import Modal from "react-modal";
+
+const { DateTime } = require("luxon");
 
 const Select = () => {
   // state to store data
@@ -12,7 +12,7 @@ const Select = () => {
   const queryClient = useQueryClient();
 
   // query to get data
-  const fetchData = async () =>  await supabase.from("trainings").select("*");
+  const fetchData = async () => await supabase.from("trainings").select("*");
   const { data, isFetching } = useQuery("selectFetch", fetchData);
 
   // get data
@@ -20,16 +20,19 @@ const Select = () => {
   //   getList();
   // }, []);
 
-  // handle delete 
+  // handle delete
   const handleDelete = async (id) => {
-  const { data, error } = await supabase.from("trainings").delete().eq("id", id);
-  if (error) {
-    console.log(error)
-  }
+    const { data, error } = await supabase
+      .from("trainings")
+      .delete()
+      .eq("id", id);
+    if (error) {
+      console.log(error);
+    }
 
-  queryClient.invalidateQueries("selectFetch");
-  queryClient.invalidateQueries("updateFetch");
-  }
+    queryClient.invalidateQueries("selectFetch");
+    queryClient.invalidateQueries("updateFetch");
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -74,10 +77,14 @@ const Select = () => {
                       </th>
                       <td className="py-4 px-6">{item.content}</td>
                       <td className="py-4 px-6">
-                        {moment(item.start_date_time).format("LLLL")}
+                        {DateTime.fromISO(item.start_date_time).toFormat(
+                          "EEEE',' MMMM d',' h:mm a"
+                        )}
                       </td>
                       <td className="py-4 px-6">
-                        {moment(item.end_date_time).format("LLLL")}
+                        {DateTime.fromISO(item.end_date_time).toFormat(
+                          "EEEE',' MMMM d',' h:mm a"
+                        )}
                       </td>
                       <td className="py-4 px-6 text-right">
                         <Link
@@ -91,7 +98,10 @@ const Select = () => {
                         </Link>
                       </td>
                       <td className="py-4 px-6 text-right">
-                        <button className="font-medium text-red-600 dark:text-red-500 hover:underline" onClick={() => handleDelete(item.id)}>
+                        <button
+                          className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                          onClick={() => handleDelete(item.id)}
+                        >
                           Delete
                         </button>
                       </td>

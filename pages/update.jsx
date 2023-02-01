@@ -40,8 +40,8 @@ const Insert = () => {
       .update({
         title: title,
         content: content,
-        start_date_time: start,
-        end_date_time: end,
+        start_date_time: start.toISOString(),
+        end_date_time: end.toISOString(),
       })
       .eq("id", id);
     if (error) {
@@ -72,8 +72,8 @@ const Insert = () => {
             mutate({
               title: title,
               content: content,
-              start: moment(start).format(),
-              end: moment(end).format(),
+              start: new Date(start),
+              end: new Date(end),
             });
           }}
         >

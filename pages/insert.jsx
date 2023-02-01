@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import moment from "moment/moment";
 import supabase from "../supabase";
 
 const Insert = () => {
@@ -12,8 +11,8 @@ const Insert = () => {
     const { error } = await supabase.from("trainings").insert({
       title: handleSubmit.title,
       content: handleSubmit.content,
-      start_date_time: handleSubmit.start,
-      end_date_time: handleSubmit.end,
+      start_date_time: (handleSubmit.start).toISOString(),
+      end_date_time: (handleSubmit.end).toISOString(),
     });
 
     if (error) {
@@ -49,8 +48,8 @@ const Insert = () => {
           setHandleSubmit({
             title: e.target[0].value,
             content: e.target[1].value,
-            start: moment(e.target[2].value).format(),
-            end: moment(e.target[3].value).format(),
+            start: new Date (e.target[2].value),
+            end: new Date (e.target[3].value),
           });
         }}
       >
