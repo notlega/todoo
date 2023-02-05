@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import { useRouter } from "next/router";
-import moment from "moment/moment";
 import supabase from "../supabase";
+
+const { DateTime } = require("luxon");
 
 const Insert = () => {
   // state to handle submit
@@ -35,20 +36,35 @@ const Insert = () => {
 
   // handle data update
   const setTrain = async ({ title, content, start, end }) => {
-    const { data, error } = await supabase
-      .from("trainings")
-      .update({
-        title: title,
-        content: content,
-        start_date_time: start.toISOString(),
-        end_date_time: end.toISOString(),
-      })
-      .eq("id", id);
-    if (error) {
-      console.log(error);
+    if (start === "" && end === "") {
+      // console.log(start);
+      const { data, error } = await supabase
+        .from("trainings")
+        .update({
+          title: title,
+          content: content,
+        })
+        .eq("id", id);
+      if (error) {
+        console.log(error);
+      }
+    } else if (start !== "" && end !== "") {
+      // console.log(DateTime.fromJSDate(start).toISO());
+      // console.log(DateTime.fromJSDate(end).toISO());
+      const { data, error } = await supabase
+        .from("trainings")
+        .update({
+          title: title,
+          content: content,
+          start_date_time: DateTime.fromJSDate(start).toISO(),
+          end_date_time: DateTime.fromJSDate(end).toISO(),
+        })
+        .eq("id", id);
+      if (error) {
+        console.log(error);
+      }
     }
   };
-
 
   const refresh = {
     onSuccess: () => {
@@ -93,7 +109,6 @@ const Insert = () => {
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
-                required
               />
             </div>
           </div>
@@ -113,7 +128,6 @@ const Insert = () => {
                 onChange={(e) => {
                   setContent(e.target.value);
                 }}
-                required
               />
             </div>
           </div>
@@ -130,7 +144,10 @@ const Insert = () => {
                 name="current start"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                {data && moment(data.data[0].start_date_time).format("LLLL")}
+                {data &&
+                  DateTime.fromISO(data.data[0].start_date_time).toFormat(
+                    "EEEE',' MMMM d',' h:mm a"
+                  )}
               </text>
             </div>
             <span className="mx-4 text-gray-500">to</span>
@@ -140,7 +157,10 @@ const Insert = () => {
                 name="current end"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                {data && moment(data.data[0].end_date_time).format("LLLL")}
+                {data &&
+                  DateTime.fromISO(data.data[0].end_date_time).toFormat(
+                    "EEEE',' MMMM d',' h:mm a"
+                  )}
               </text>
             </div>
           </div>
@@ -162,7 +182,6 @@ const Insert = () => {
                 onChange={(e) => {
                   setStart(e.target.value);
                 }}
-                required
               />
             </div>
             <span className="mx-4 text-gray-500">to</span>
@@ -177,7 +196,6 @@ const Insert = () => {
                 onChange={(e) => {
                   setEnd(e.target.value);
                 }}
-                required
               />
             </div>
           </div>

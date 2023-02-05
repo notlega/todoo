@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import supabase from "../supabase";
 
+const { DateTime } = require("luxon");
+
 const Insert = () => {
   // state to handle submit
   const [handleSubmit, setHandleSubmit] = useState(null);
@@ -8,11 +10,12 @@ const Insert = () => {
 
   // insert data function
   async function insertItem() {
+    // console.log(DateTime.fromJSDate(handleSubmit.start).toISO());
     const { error } = await supabase.from("trainings").insert({
       title: handleSubmit.title,
       content: handleSubmit.content,
-      start_date_time: (handleSubmit.start).toISOString(),
-      end_date_time: (handleSubmit.end).toISOString(),
+      start_date_time: DateTime.fromJSDate(handleSubmit.start).toISO(),
+      end_date_time: DateTime.fromJSDate(handleSubmit.end).toISO(),
     });
 
     if (error) {
