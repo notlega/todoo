@@ -7,6 +7,8 @@ const Insert = () => {
   // state to handle submit
   const [handleSubmit, setHandleSubmit] = useState(null);
   const [checkSubmit, setCheckSubmit] = useState(false);
+  const [title, setTitle] = useState("basketball training");
+  const [content, setContent] = useState("basketball training with friend at CC");
 
   // insert data function
   async function insertItem() {
@@ -21,6 +23,14 @@ const Insert = () => {
     if (error) {
       console.log(error);
     }
+  }
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  }
+  
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
   }
 
   useEffect(() => {
@@ -69,6 +79,8 @@ const Insert = () => {
               id="title"
               type="text"
               placeholder="training 1"
+              value={title}
+              onChange={handleTitleChange}
               required
             />
           </div>
@@ -77,15 +89,17 @@ const Insert = () => {
           <div className="w-full px-3">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="context"
+              htmlFor="content"
             >
               Content
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="context"
+              id="content"
               type="text"
               placeholder="Training for ..."
+              value={content}
+              onChange={handleContentChange}
               required
             />
           </div>
@@ -124,11 +138,11 @@ const Insert = () => {
       </form>
       {checkSubmit && (
         <div
-          class="bg-green-100 border-t border-b border-green-500 text-green-700 px-4 py-3 mt-10 mx-40"
+          className="bg-green-100 border-t border-b border-green-500 text-green-700 px-4 py-3 mt-10 mx-40"
           role="alert"
         >
-          <p class="font-bold">Thank you</p>
-          <p class="text-sm">New training details have been added.</p>
+          <p className="font-bold">Thank you</p>
+          <p className="text-sm">New training details have been added.</p>
         </div>
       )}
     </div>

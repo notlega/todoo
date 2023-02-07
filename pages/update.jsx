@@ -5,7 +5,7 @@ import supabase from "../supabase";
 
 const { DateTime } = require("luxon");
 
-const Insert = () => {
+const Update = () => {
   // state to handle submit
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -221,4 +221,4 @@ const Insert = () => {
   );
 };
 
-export default Insert;
+export default Update;
