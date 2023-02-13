@@ -1,33 +1,36 @@
 import { useState, useEffect } from "react";
 import { QueryClientProvider, QueryClient, useQuery } from "react-query";
 import { useQueryClient } from "react-query";
-import supabase from "../supabase";
+import { useRouter } from "next/router";
+import supabase from "../../supabase";
 import Link from "next/link";
 
 const { DateTime } = require("luxon");
 
 const Select = () => {
   // state to store data
-  const [getUser, setUser] = useState(null);
+  const [getUser, setUser] = useState();
   const [getName, setName] = useState('');
   const queryClient = useQueryClient();
 
-
+    const router = useRouter();
+    const { id } = router.query;
+    console.log(id);
   // query to get data
   const fetchData = async () =>
-    await supabase.rpc("get_user_data", { _uuid: getUser.userid });
-  const fetchUser = async () => await supabase.auth.user();
+    await supabase.rpc("get_user_data", { _uuid: id.toString() });
+  // const fetchUser = async () => await supabase.auth.user();
   const { data, isFetching } = useQuery("selectFetch", fetchData);
-  const { userData, isLoading } = useQuery("selectFetch", fetchUser);
+  // const { userData, isLoading } = useQuery("selectUser", fetchUser);
 
   if (data) {
     console.log(data)
-    console.log(getUser.userid)
+    console.log(getUser)
   }
 
-  if (userData) {
-    console.log(userData)
-  }
+  // if (userData) {
+  //   console.log(userData)
+  // }
 
   // get data
   // useEffect(() => {
@@ -37,10 +40,12 @@ const Select = () => {
     // if (localStorage.getItem("user") !== null ) {
       //checking if there already is a state in localstorage
       //if yes, update the current state with the stored one
-      setUser(JSON.parse(localStorage.getItem("user")));
+      setUser(localStorage.getItem("user"));
       setName(localStorage.getItem("name").toString());
     // }
   }, []);
+
+  
 
   // if (getUser) {
   //   console.log(getUser)

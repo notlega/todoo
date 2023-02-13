@@ -39,7 +39,7 @@ const Update = () => {
     if (start === "" && end === "") {
       // console.log(start);
       const { data, error } = await supabase
-        .from("trainings")
+        .from("trainings_2")
         .update({
           title: title,
           content: content,
@@ -52,7 +52,7 @@ const Update = () => {
       // console.log(DateTime.fromJSDate(start).toISO());
       // console.log(DateTime.fromJSDate(end).toISO());
       const { data, error } = await supabase
-        .from("trainings")
+        .from("trainings_2")
         .update({
           title: title,
           content: content,

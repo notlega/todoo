@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import supabase from "../supabase";
+import { useRouter } from "next/router";
+import supabase from "../../supabase";
+import Link from "next/link";
 
 const { DateTime } = require("luxon");
 
@@ -20,13 +22,17 @@ const Insert = () => {
       content: handleSubmit.content,
       start_date_time: DateTime.fromJSDate(handleSubmit.start).toISO(),
       end_date_time: DateTime.fromJSDate(handleSubmit.end).toISO(),
-      userid: getUser.userid,
+      userid: getUser,
     });
 
     if (error) {
       console.log(error);
     }
   }
+
+    const router = useRouter();
+    const { id } = router.query;
+    console.log(id);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -37,7 +43,7 @@ const Insert = () => {
   }
 
   useEffect(() => {
-      setUser(JSON.parse(localStorage.getItem("user")));
+      setUser(localStorage.getItem("user"));
       setName(localStorage.getItem("name").toString());
     // check if the form has been filled in
     if (handleSubmit !== null) {
@@ -134,6 +140,12 @@ const Insert = () => {
           Submit
         </button>
       </form>
+      <Link
+        className="bg-transparent hover:bg-green-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded mt-5 ml-60"
+        href={`/select/${id}`}
+      >
+        Go to select
+      </Link>
       {checkSubmit && (
         <div
           className="bg-green-100 border-t border-b border-green-500 text-green-700 px-4 py-3 mt-10 mx-40"
