@@ -32,7 +32,11 @@ const Logins = () => {
             console.log(data)
 
             if (data !== null  ) {
-                localStorage.setItem("user", data.user.email); 
+                localStorage.setItem(
+                  "user",
+                  JSON.stringify({ userid: data.user.id })
+                ); 
+                localStorage.setItem("name", data.user.user_metadata.fullname); 
             }
         }
     }

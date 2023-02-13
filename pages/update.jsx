@@ -21,7 +21,7 @@ const Update = () => {
   // query to get data
   const { data } = useQuery({
     queryKey: ["updateFetch", id],
-    queryFn: async () => supabase.from("trainings").select("*").eq("id", id),
+    queryFn: async () => supabase.from("trainings_2").select("*").eq("id", id),
   });
 
   // to prevent many renders

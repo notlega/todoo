@@ -9,20 +9,20 @@ const { DateTime } = require("luxon");
 const Select = () => {
   // state to store data
   const [getUser, setUser] = useState(null);
-  
+  const [getName, setName] = useState('');
   const queryClient = useQueryClient();
 
 
   // query to get data
   const fetchData = async () =>
-    await supabase.from("trainings_2").select("*").eq("user.email", getUser);;
+    await supabase.rpc("get_user_data", { _uuid: getUser.userid });
   const fetchUser = async () => await supabase.auth.user();
   const { data, isFetching } = useQuery("selectFetch", fetchData);
   const { userData, isLoading } = useQuery("selectFetch", fetchUser);
 
   if (data) {
     console.log(data)
-    console.log(getUser)
+    console.log(getUser.userid)
   }
 
   if (userData) {
@@ -34,11 +34,12 @@ const Select = () => {
   //   getList();
   // }, []);
   useEffect(() => {
-    if (localStorage.getItem("user") !== null ) {
+    // if (localStorage.getItem("user") !== null ) {
       //checking if there already is a state in localstorage
       //if yes, update the current state with the stored one
-      setUser(localStorage.getItem("user"));
-    }
+      setUser(JSON.parse(localStorage.getItem("user")));
+      setName(localStorage.getItem("name").toString());
+    // }
   }, []);
 
   // if (getUser) {
@@ -47,7 +48,7 @@ const Select = () => {
   // handle delete
   const handleDelete = async (id) => {
     const { data, error } = await supabase
-      .from("trainings")
+      .from("trainings_2")
       .delete()
       .eq("id", id);
     if (error) {
@@ -62,6 +63,7 @@ const Select = () => {
     <QueryClientProvider client={queryClient}>
       <div className="m-20" id="select">
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
+          <h4>User name: {getName}</h4> <br />
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>

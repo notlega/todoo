@@ -7,17 +7,20 @@ const Insert = () => {
   // state to handle submit
   const [handleSubmit, setHandleSubmit] = useState(null);
   const [checkSubmit, setCheckSubmit] = useState(false);
-  const [title, setTitle] = useState("basketball training");
-  const [content, setContent] = useState("basketball training with friend at CC");
+  const [getUser, setUser] = useState(null);
+  const [getName, setName] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   // insert data function
   async function insertItem() {
     // console.log(DateTime.fromJSDate(handleSubmit.start).toISO());
-    const { error } = await supabase.from("trainings").insert({
+    const { error } = await supabase.from("trainings_2").insert({
       title: handleSubmit.title,
       content: handleSubmit.content,
       start_date_time: DateTime.fromJSDate(handleSubmit.start).toISO(),
       end_date_time: DateTime.fromJSDate(handleSubmit.end).toISO(),
+      userid: getUser.userid,
     });
 
     if (error) {
@@ -34,6 +37,8 @@ const Insert = () => {
   }
 
   useEffect(() => {
+      setUser(JSON.parse(localStorage.getItem("user")));
+      setName(localStorage.getItem("name").toString());
     // check if the form has been filled in
     if (handleSubmit !== null) {
       // call data insert function
@@ -44,14 +49,6 @@ const Insert = () => {
   }, [handleSubmit]);
 
 
-  // check if the form has been filled in
-  // if (handleSubmit !== null) {
-  //   // call data insert function
-  //   insertItem();
-  //   // console.log(handleSubmit)
-  //   return true 
-  // }
-
   return (
     <div>
       <form
@@ -61,13 +58,14 @@ const Insert = () => {
           setHandleSubmit({
             title: e.target[0].value,
             content: e.target[1].value,
-            start: new Date (e.target[2].value),
-            end: new Date (e.target[3].value),
+            start: new Date(e.target[2].value),
+            end: new Date(e.target[3].value),
           });
         }}
       >
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <h4>User name: {getName}</h4> <br />
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="title"
