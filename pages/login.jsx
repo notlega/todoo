@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Router from "next/router";
 import supabase from "../supabase";
+import { data } from "autoprefixer";
 
 const Logins = () => {
     // const supabaseClient = useSupabaseClient()
@@ -29,6 +30,10 @@ const Logins = () => {
             setSession(data.session)
             Router.push('/insert')
             console.log(data)
+
+            if (data !== null  ) {
+                localStorage.setItem("user", data.user.email); 
+            }
         }
     }
 
@@ -43,6 +48,7 @@ const Logins = () => {
             setColorMsg('text-green-500 text-lg mb-2')
         }
     }
+
     
     return(
         <div>

@@ -8,18 +8,42 @@ const { DateTime } = require("luxon");
 
 const Select = () => {
   // state to store data
-  const [getdata, setData] = useState(null);
+  const [getUser, setUser] = useState(null);
+  
   const queryClient = useQueryClient();
 
+
   // query to get data
-  const fetchData = async () => await supabase.from("trainings").select("*");
+  const fetchData = async () =>
+    await supabase.from("trainings_2").select("*").eq("user.email", getUser);;
+  const fetchUser = async () => await supabase.auth.user();
   const { data, isFetching } = useQuery("selectFetch", fetchData);
+  const { userData, isLoading } = useQuery("selectFetch", fetchUser);
+
+  if (data) {
+    console.log(data)
+    console.log(getUser)
+  }
+
+  if (userData) {
+    console.log(userData)
+  }
 
   // get data
   // useEffect(() => {
   //   getList();
   // }, []);
+  useEffect(() => {
+    if (localStorage.getItem("user") !== null ) {
+      //checking if there already is a state in localstorage
+      //if yes, update the current state with the stored one
+      setUser(localStorage.getItem("user"));
+    }
+  }, []);
 
+  // if (getUser) {
+  //   console.log(getUser)
+  // }
   // handle delete
   const handleDelete = async (id) => {
     const { data, error } = await supabase
