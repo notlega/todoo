@@ -11,8 +11,8 @@ const Insert = () => {
   const [checkSubmit, setCheckSubmit] = useState(false);
   const [getUser, setUser] = useState(null);
   const [getName, setName] = useState("");
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("training 1");
+  const [content, setContent] = useState("training 1 with coach");
 
   // insert data function
   async function insertItem() {
