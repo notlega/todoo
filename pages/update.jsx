@@ -4,7 +4,7 @@
 
 // const { DateTime } = require('luxon');
 
-// const Update = () => {
+const Update = () => {
 //   // state to handle submit
 //   const [title, setTitle] = useState('');
 //   const [content, setContent] = useState('');
@@ -218,6 +218,6 @@
 //       )}
 //     </div>
 //   );
-// };
+};
 
-// export default Update;
+export default Update;
