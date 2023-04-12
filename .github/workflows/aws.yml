@@ -57,3 +57,19 @@ jobs:
 
       - name: Restart task
         run: aws ecs update-service --force-new-deployment --service todo-service --cluster todo
+
+      - name: Get Public DNS and IP
+        run: |
+          export PublicDnsName=$(aws ec2 describe-instances --query 'Reservations[].Instances[].PublicDnsName' --output text)
+          export PublicIpAddress=$(aws ec2 describe-instances --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+          echo "Public DNS: $PublicDnsName"
+          echo "Public IP: $PublicIpAddress"
+
+      - name: Output Public DNS and IP into PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            # Public DNS and IP
+            Public DNS: $PublicDnsName
+            Public IP: $PublicIpAddress
