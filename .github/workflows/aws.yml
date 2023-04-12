@@ -41,7 +41,7 @@ jobs:
 
       - name: Login to AWS and push images
         run: |
-          aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_REPOSITORY_URI }}
+          aws ecr get-login-"password" --region ap-southeast-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_REPOSITORY_URI }}
           docker push ${{ secrets.AWS_REPOSITORY_URI }}/todo:${{ github.sha }}
           docker push ${{ secrets.AWS_REPOSITORY_URI }}/todo:latest
 
