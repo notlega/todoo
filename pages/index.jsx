@@ -33,7 +33,7 @@ const Login = () => {
   return (
     <div className="hero min-h-screen !mt-0">
       <div className="hero-content flex-col text-center justify-center space-y-8 w-full">
-        <h1 className="text-5xl font-bold w-full">Login</h1>
+        <h1 className="text-5xl font-bold w-full">Sign In</h1>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={loginSchema}
